@@ -1,0 +1,50 @@
+{% extends "accounts/base.html" %}
+
+{% load static %} 
+{% load crispy_forms_tags %} 
+
+{% block content %}
+<div class="container my-5">
+
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold">🎨 Become an Artist on Our Platform</h1>
+        <p class="text-muted">
+            We're excited to welcome creative minds! Register below to showcase your talent,
+            share your portfolio, and join our growing artist community.
+        </p>
+    </div>
+
+    <div class="p-4 mb-4 rounded" 
+         style="background: linear-gradient(135deg, #f8f9fa, #eae6ff); border-left: 6px solid #6f42c1;">
+        <h4 class="mb-1">Why Join as an Artist?</h4>
+        <ul class="mb-0">
+            <li>Showcase your artwork to a wider audience</li>
+            <li>Connect with fans and industry professionals</li>
+            <li>Build your artistic identity and presence</li>
+        </ul>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-3 text-center">Artist Registration</h4>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Register as Artist
+                        </button>
+                    </form>
+                    <hr>
+                    <a href="{% url 'accounts:user-register'%}">Sign up as listener</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

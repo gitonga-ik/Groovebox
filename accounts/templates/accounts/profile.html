@@ -1,0 +1,98 @@
+{% extends "accounts/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Profile Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+
+                    <!-- Profile Image -->
+                    {% if profile.profile_photo %}
+                        <img src="{{ profile.profile_photo.url }}"
+                             alt="Profile Picture"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'accounts/default.png' %}"
+                             alt="Default Profile"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+
+                    <!-- Username & Email -->
+                    <h3 class="card-title mb-0">{{ profile.user.username }}</h3>
+                    <p class="text-muted">{{ profile.user.email }}</p>
+
+                    <hr>
+
+                    <!-- Profile Details Row -->
+                    <div class="row text-start">
+
+                        <!-- Bio -->
+                        <div class="col-12 mb-3">
+                            <h5>Bio</h5>
+                            <p>
+                                {% if profile.bio %}
+                                    {{ profile.bio }}
+                                {% else %}
+                                    <em>No bio added yet.</em>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="col-12">
+                            <h5>Date of Birth</h5>
+                            <p>
+                                {% if profile.date_of_birth %}
+                                    {{ profile.date_of_birth }}
+                                {% else %}
+                                    <em>Not provided</em>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Edit Form Card -->
+            <div class="accordion" id="profile-update-accordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
+                    Edit Profile
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#profile-update-accordion">
+                  <div class="accordion-body">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                
+                                <div class="d-grid mt-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
