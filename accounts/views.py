@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 # Create your views here.
@@ -13,6 +14,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, "Registration successful")
             return redirect("music:home")
     else:
         form = UserRegistrationForm()
@@ -26,6 +28,7 @@ def artist_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, "Registration successful")
             return redirect("music:home")
     else:
         form = ArtistRegistrationForm()
@@ -55,10 +58,15 @@ def user_logout(request):
 def profile(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
     if request.method == "POST":
-        form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect("accounts:profile-home", pk=pk)
+        try:
+            form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile updated successfully")
+                return redirect("accounts:profile-home", pk=pk)
+        except Exception as error:  
+            messages.error(request, f"{error}")
+            return redirect(request.path)
     else:
         form = ProfileUpdateForm(instance=profile)
     return render(request, "accounts/profile.html", {"profile": profile, "form": form})

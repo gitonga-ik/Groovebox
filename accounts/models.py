@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-
+from django.utils import timezone
 
 # Create your models here.
 class AppUserManager(BaseUserManager):
@@ -45,12 +45,20 @@ class Artist(AppUser):
     class Meta:
         proxy = True
 
+    def save(self, *args, **kwargs):
+        self.role = "Artist"
+        return super().save(*args, **kwargs)
 
 class Profile(models.Model):
     user = models.OneToOneField("accounts.AppUser", on_delete=models.CASCADE)
-    date_of_birth = models.DateField(null=True)
-    bio = models.TextField(null=True)
-    profile_photo = models.ImageField(upload_to="profile_pictures/", null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    profile_photo = models.ImageField(upload_to="profile_pictures/", null=True, blank=True)
 
     def __str__(self):
         return f"I am {self.user.username}"
+    
+    def save(self, *args, **kwargs):
+        if self.date_of_birth > timezone.now().date():
+            raise Exception("Invalid date of birth")
+        return super().save(*args, **kwargs)

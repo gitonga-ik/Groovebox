@@ -1,0 +1,55 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}
+{{ song.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title mb-2">{{ song.title }}</h2>
+
+      <hr>
+
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <strong>Genre:</strong> {{ song.genre }}
+        </li>
+
+        <li class="list-group-item">
+          <strong>Album:</strong> {{ song.album }}
+        </li>
+
+        <li class="list-group-item">
+          <strong>Artist:</strong>
+          <a href="{% url 'music:artist-details' song.artist.id %}">
+            {{ song.artist.username }}
+          </a>
+        </li>
+
+        <li class="list-group-item">
+          <strong>Date Uploaded:</strong>
+          {{ song.uploaded_on|date:"M d, Y" }}
+        </li>
+      </ul>
+
+      <!-- 🔥 Buttons shown ONLY if the user is the artist -->
+      {% if request.user.id == song.artist.id %}
+      <hr>
+
+      <div class="d-flex gap-2">
+        <a href="{% url 'music:song-update' song.id %}" class="btn btn-primary w-50">
+          Update Song
+        </a>
+
+        <a href="{% url 'music:song-delete' song.id %}" class="btn btn-danger w-50">
+          Delete Song
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

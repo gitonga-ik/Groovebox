@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-3">
 
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -63,6 +63,71 @@
                 </div>
             </div>
 
+            <!-- Artist Music Display -->
+            {% if user.role == "Artist" %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Your Music</h4>
+                        <a href="{% url 'music:song-upload' %}" class="btn btn-sm btn-primary">
+                            Upload New Music
+                        </a>
+                    </div>
+                    <hr>
+
+                    {% if user.song_set.all %}
+                        <ul class="list-group">
+                            {% for song in user.song_set.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ song.title }}
+
+                                    <a class="btn btn-sm btn-outline-primary"
+                                    href="{% url 'music:song-details' song.id %}">
+                                        View
+                                    </a>
+                                </li>
+                            {% empty %}
+                                <p><em>You haven’t uploaded any music yet.</em></p>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p><em>No music found.</em></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- END ARTIST SECTION -->
+            
+            {% if user.playlist_set.all %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Your Playlists</h4>
+                        <a href="{% url 'music:playlist-create' %}" class="btn btn-sm btn-primary">
+                            Create New Playlist
+                        </a>
+                    </div>
+                    <hr>
+
+                    <ul class="list-group">
+                        {% for playlist in user.playlist_set.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ playlist.title }}
+
+                                <a class="btn btn-sm btn-outline-primary"
+                                href="{% url 'music:playlist-details' playlist.id %}">
+                                    View
+                                </a>
+                            </li>
+                        {% empty %}
+                            <p><em>You haven’t created any playlists yet.</em></p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+
             <!-- Edit Form Card -->
             <div class="accordion" id="profile-update-accordion">
               <div class="accordion-item">
@@ -91,6 +156,7 @@
                 </div>
               </div>
             </div>
+
         </div>
     </div>
 

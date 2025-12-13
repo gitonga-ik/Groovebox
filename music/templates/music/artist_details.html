@@ -1,0 +1,59 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}
+{{artist.username}}
+{% endblock title%}
+
+{% block content%}
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+
+                    {% if artist.profile.profile_photo %}
+                        <img src="{{ artist.profile.profile_photo.url }}" alt="{{ artist.username }}"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+
+                    <h2 class="card-title mb-2">{{ artist.username }}</h2>
+
+                    {% if artist.bio %}
+                        <p class="text-muted">{{ artist.profile.bio }}</p>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Songs by {{ artist.username }}</h5>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    {% for song in artist.song_set.all %}
+                        <li class="list-group-item">
+                            <a href="{% url 'music:song-details' song.id %}">
+                                {{ song.title }}
+                            </a>
+                            <span class="badge bg-secondary float-end">
+                                {{ song.genre }}
+                            </span>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">
+                            No songs available.
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock content%}

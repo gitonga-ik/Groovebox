@@ -11,3 +11,9 @@ wheels/
 
 # init.py
 *\__init__.py
+
+# media dir
+media/
+
+# sqlite
+db.sqlite3

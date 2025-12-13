@@ -27,12 +27,11 @@ class ArtistRegistrationForm(UserCreationForm):
         user.role = "Artist"
 
         if commit:
-            user.save()
-            Profile.objects.create(user=user)
-        
+            user.save()        
         return user
 
 class ProfileUpdateForm(forms.ModelForm):
+    bio = forms.CharField(required=False)
     class Meta:
         model = Profile
         fields = ["bio", "date_of_birth", "profile_photo"]
