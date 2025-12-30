@@ -4,14 +4,14 @@ from django.utils import timezone
 
 # Create your models here.
 class AppUserManager(BaseUserManager):
-    def create_user(self, email=None, password=None, **kwargs):
-        if email is None or password is None:
+    def create_user(self, username=None, email=None, password=None, **kwargs):
+        if email is None or password is None or username is None:
             raise ValueError("Email and password should be provided")
 
-        normal_email = self.normalize_mail(email)
-        user = self.model(email=normal_email, **kwargs)
+        user = self.model(email=email, username=username, **kwargs)
         user.set_password(password)
         user.save()
+        return user
 
     def create_superuser(self, email=None, password=None, **kwargs):
         kwargs.setdefault("is_staff", True)
@@ -38,7 +38,6 @@ class ArtistManager(AppUserManager):
     def get_queryset(self):
         return super().get_queryset().filter(role="Artist")
 
-
 class Artist(AppUser):
     objects = ArtistManager()
 
@@ -59,6 +58,6 @@ class Profile(models.Model):
         return f"I am {self.user.username}"
     
     def save(self, *args, **kwargs):
-        if self.date_of_birth > timezone.now().date():
+        if self.date_of_birth and self.date_of_birth > timezone.now().date():
             raise Exception("Invalid date of birth")
         return super().save(*args, **kwargs)

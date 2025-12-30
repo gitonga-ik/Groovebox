@@ -26,6 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("v1/", include("music.urls")),
+    path("v2/", include("api.urls")),
 ]
 
 if settings.DEBUG:

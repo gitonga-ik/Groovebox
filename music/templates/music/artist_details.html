@@ -18,6 +18,10 @@
                         <img src="{{ artist.profile.profile_photo.url }}" alt="{{ artist.username }}"
                              class="rounded-circle mb-3"
                              style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="/media/profile_pictures/default.png" alt="Artist has no profile picture"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
                     {% endif %}
 
                     <h2 class="card-title mb-2">{{ artist.username }}</h2>

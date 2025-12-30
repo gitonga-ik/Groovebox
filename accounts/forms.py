@@ -7,28 +7,10 @@ class UserRegistrationForm(UserCreationForm):
         model = AppUser
         fields = ["username", "email"]
 
-    def save(self, commit=True):
-        user = super().save()
-
-        if commit:
-            Profile.objects.create(user=user)
-            
-        return user
-    
-
 class ArtistRegistrationForm(UserCreationForm):
     class Meta:
         model = Artist
         fields = ["username", "email"]
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-
-        user.role = "Artist"
-
-        if commit:
-            user.save()        
-        return user
 
 class ProfileUpdateForm(forms.ModelForm):
     bio = forms.CharField(required=False)
